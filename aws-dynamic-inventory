@@ -1,0 +1,28 @@
+# project-content/aws-operations/inventories/aws_dynamic_inventory.yml
+---
+plugin: aws_ec2
+regions:
+  - us-east-1
+  - us-west-2
+  - eu-west-1
+filters:
+  instance-state-name: running
+hostnames:
+  - private-ip-address
+keyed_groups:
+  - key: tags
+    prefix: tag
+    separator: ""
+  - key: placement.region
+    prefix: aws_region
+  - key: instance_type
+    prefix: instance_type
+  - key: vpc_id
+    prefix: vpc
+compose:
+  ansible_host: private_ip_address
+  ansible_user: "ec2-user"
+  cloud_provider: "aws"
+  cloud_region: "{{ placement.region }}"
+  instance_id: "{{ instance_id }}"
+  launch_time: "{{ launch_time }}"
