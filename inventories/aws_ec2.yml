@@ -1,11 +1,26 @@
 ---
 plugin: aws_ec2
 regions:
-  - us-east-1
+  - "{{ aws_region | default('us-east-1') }}"
 filters:
-  instance-state-name: running
+  instance-state-name:
+    - running
+    - stopped
+hostnames:
+  - private-ip-address
+  - ip-address
 keyed_groups:
-  - key: tags.Name
-    prefix: name
+  - key: tags
+    prefix: tag
+  - key: placement.region
+    prefix: aws_region
+  - key: instance_type
+    prefix: type
 compose:
-  ansible_host: public_ip_address
+  ansible_host: private_ip_address
+  ansible_user: ec2-user
+  cloud_provider: aws
+
+# Use the source variables from AAP
+aws_access_key: "{{ aws_access_key }}"
+aws_secret_key: "{{ aws_secret_key }}"
