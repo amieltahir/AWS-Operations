@@ -1,7 +1,8 @@
 ---
-plugin: aws_ec2
+plugin: amazon.aws.aws_ec2  # CHANGED: Use full collection name
 regions:
-  - "{{ aws_region | default('us-east-1') }}"
+  - us-east-1
+  - us-west-2
 filters:
   instance-state-name:
     - running
@@ -21,6 +22,3 @@ compose:
   ansible_user: ec2-user
   cloud_provider: aws
 
-# Use the source variables from AAP
-aws_access_key: "{{ aws_access_key }}"
-aws_secret_key: "{{ aws_secret_key }}"
